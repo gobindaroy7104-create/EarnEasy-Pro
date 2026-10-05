@@ -216,7 +216,7 @@
 
   <div class="header">
     <h2>EarnEasy Pro</h2>
-    <p id="welcome">স্বাগতম 👋</p>
+    <p id="welcome"> </p>
   </div>
 
   <main class="container">
@@ -226,7 +226,7 @@
 
       <div class="balance">
         <small>Available Balance</small>
-        <h1 id="userBalance">৳0.00</h1>
+        <h1 id="userBalance">0.00</h1>
         <span class="status" id="accountStatus">
           Loading...
         </span>
@@ -234,14 +234,14 @@
 
       <div class="activation" id="activationSection">
 
-        <h3>🔐 Account Activation</h3>
+        <h3> Account Activation</h3>
 
         <p>
-          আপনার অ্যাকাউন্ট চালু করতে একবার
-          <b>৳15</b> Activation Fee পাঠান।
+              
+          <b>15</b> Activation Fee 
         </p>
 
-        <div class="fee">৳15</div>
+        <div class="fee">15</div>
 
         <div class="pay-box">
           <strong>bKash</strong><br>
@@ -260,25 +260,25 @@
         </div>
 
         <p style="font-size:13px;margin-top:12px;">
-          টাকা পাঠানোর পর নিচে Transaction ID দিন:
+              Transaction ID :
         </p>
 
         <input
           id="trx"
           type="text"
-          placeholder="Transaction ID লিখুন"
+          placeholder="Transaction ID "
         >
 
         <button class="submit" id="btnSubmit" onclick="submitActivation()">
-          পেমেন্ট করেছি — যাচাইয়ের জন্য পাঠান
+               
         </button>
 
         <div class="message" id="message"></div>
 
         <div class="info">
-          ⚠️ Transaction ID দেওয়ার পর আপনার পেমেন্ট
-          ম্যানুয়ালি যাচাই করা হবে। যাচাই সম্পন্ন হলে
-          অ্যাকাউন্ট Active হবে।
+           Transaction ID    
+                
+           Active 
         </div>
 
       </div>
@@ -288,8 +288,8 @@
     <!-- TASKS -->
     <section id="tasks" class="page">
       <div class="card locked" id="taskBox">
-        <h3>🔒 Tasks Locked</h3>
-        <p>Account Active করার পর Tasks ব্যবহার করতে পারবেন।</p>
+        <h3> Tasks Locked</h3>
+        <p>Account Active   Tasks   </p>
       </div>
     </section>
 
@@ -297,8 +297,8 @@
     <!-- REFERRAL -->
     <section id="referral" class="page">
       <div class="card locked" id="refBox">
-        <h3>🔒 Referral Locked</h3>
-        <p>Account Active করার পর Referral ব্যবহার করতে পারবেন।</p>
+        <h3> Referral Locked</h3>
+        <p>Account Active   Referral   </p>
       </div>
     </section>
 
@@ -308,16 +308,16 @@
 
       <div class="card">
         <h3>Wallet</h3>
-        <p>Available Balance: <b id="walletBalance">৳0.00</b></p>
-        <p>Task Income: <b>৳0.00</b></p>
-        <p>Referral Income: <b>৳0.00</b></p>
-        <p>Other Income: <b>৳0.00</b></p>
+        <p>Available Balance: <b id="walletBalance">0.00</b></p>
+        <p>Task Income: <b>0.00</b></p>
+        <p>Referral Income: <b>0.00</b></p>
+        <p>Other Income: <b>0.00</b></p>
       </div>
 
       <div class="card locked">
-        <h3>🔒 Withdrawal Locked</h3>
-        <p>Minimum Withdrawal: ৳10</p>
-        <p>Account Active হওয়ার পর Withdrawal চালু হবে।</p>
+        <h3> Withdrawal Locked</h3>
+        <p>Minimum Withdrawal: 10</p>
+        <p>Account Active   Withdrawal  </p>
       </div>
 
     </section>
@@ -329,7 +329,7 @@
       <div class="card">
         <h3>Profile</h3>
         <p id="profileName">Telegram User</p>
-        <p id="profileId">User ID: —</p>
+        <p id="profileId">User ID: </p>
         <p>Account Status: <b id="profileStatus">Loading...</b></p>
       </div>
 
@@ -342,23 +342,23 @@
   <nav class="nav">
 
     <button class="active" onclick="showPage('home', this)">
-      🏠<br>Home
+      <br>Home
     </button>
 
     <button onclick="showPage('tasks', this)">
-      ✓<br>Tasks
+      <br>Tasks
     </button>
 
     <button onclick="showPage('referral', this)">
-      👥<br>Referral
+      <br>Referral
     </button>
 
     <button onclick="showPage('wallet', this)">
-      ৳<br>Wallet
+      <br>Wallet
     </button>
 
     <button onclick="showPage('profile', this)">
-      👤<br>Profile
+      <br>Profile
     </button>
 
   </nav>
@@ -379,7 +379,7 @@
       measurementId: "G-9K9GXX2TV4"
     };
 
-    // 🔴 এখানে আপনার Telegram Bot Token এবং Admin Chat ID দিন
+    //    Telegram Bot Token  Admin Chat ID 
     const BOT_TOKEN = "8681930579:AAHTliPplMSvtpmTCioFysrDJdmBYhpeRug"; 
     const ADMIN_CHAT_ID = "8659258973"; 
 
@@ -403,7 +403,7 @@
         const name = (user.first_name || "") + (user.last_name ? " " + user.last_name : "");
         currentUserName = name || "Telegram User";
 
-        document.getElementById("welcome").textContent = "স্বাগতম, " + currentUserName + " 👋";
+        document.getElementById("welcome").textContent = ", " + currentUserName + " ";
         document.getElementById("profileName").textContent = currentUserName;
         document.getElementById("profileId").textContent = "User ID: " + currentUserId;
 
@@ -434,8 +434,8 @@
 
     // UI Update Helper
     function updateUI(data) {
-      document.getElementById("userBalance").textContent = "৳" + (data.balance || 0).toFixed(2);
-      document.getElementById("walletBalance").textContent = "৳" + (data.balance || 0).toFixed(2);
+      document.getElementById("userBalance").textContent = "" + (data.balance || 0).toFixed(2);
+      document.getElementById("walletBalance").textContent = "" + (data.balance || 0).toFixed(2);
       
       const statusText = data.status || "Not Activated";
       document.getElementById("accountStatus").textContent = statusText;
@@ -443,11 +443,11 @@
 
       if (statusText === "Active") {
         document.getElementById("activationSection").style.display = "none";
-        document.getElementById("taskBox").innerHTML = "<h3>✅ Tasks Unlocked</h3><p>আপনি কাজ শুরু করতে পারেন।</p>";
-        document.getElementById("refBox").innerHTML = "<h3>👥 Referral Active</h3><p>বন্ধুদের ইনভাইট করুন।</p>";
+        document.getElementById("taskBox").innerHTML = "<h3> Tasks Unlocked</h3><p>    </p>";
+        document.getElementById("refBox").innerHTML = "<h3> Referral Active</h3><p>  </p>";
       } else if (statusText === "Pending Verification") {
         document.getElementById("message").style.display = "block";
-        document.getElementById("message").textContent = "⏳ আপনার পেমেন্ট অ্যাডমিন যাচাই করছেন। অনুগ্রহ করে অপেক্ষা করুন।";
+        document.getElementById("message").textContent = "         ";
       }
     }
 
@@ -458,12 +458,12 @@
         return;
       }
 
-      const text = `🔔 *New Activation Request!*\n\n` +
-                   `👤 *User Name:* ${userName}\n` +
-                   `🆔 *User ID:* \`${userId}\`\n` +
-                   `💳 *TrxID:* \`${trxId}\`\n` +
-                   `💰 *Amount:* ৳15\n\n` +
-                   `যাচাই করে ফায়ারবেস থেকে একাউন্ট Active করে দিন।`;
+      const text = ` *New Activation Request!*\n\n` +
+                   ` *User Name:* ${userName}\n` +
+                   ` *User ID:* \`${userId}\`\n` +
+                   ` *TrxID:* \`${trxId}\`\n` +
+                   ` *Amount:* 15\n\n` +
+                   `     Active  `;
 
       const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
 
@@ -490,24 +490,24 @@
 
       if (!trxInput) {
         message.style.display = "block";
-        message.textContent = "⚠️ আগে Transaction ID লিখুন।";
+        message.textContent = "  Transaction ID ";
         return;
       }
 
       if (trxInput.length < 5) {
         message.style.display = "block";
-        message.textContent = "⚠️ সঠিক Transaction ID দিন।";
+        message.textContent = "  Transaction ID ";
         return;
       }
 
       if (!currentUserId) {
-        tg.showAlert("Telegram App এর ভেতর থেকে ওপেন করুন।");
+        tg.showAlert("Telegram App     ");
         return;
       }
 
       try {
         btnSubmit.disabled = true;
-        btnSubmit.textContent = "পাঠানো হচ্ছে...";
+        btnSubmit.textContent = " ...";
 
         // 1. Update Firebase
         const userRef = doc(db, "users", currentUserId);
@@ -521,17 +521,17 @@
         await sendTelegramAdminAlert(currentUserId, currentUserName, trxInput);
 
         message.style.display = "block";
-        message.textContent = "✅ আপনার পেমেন্ট যাচাইয়ের জন্য পাঠানো হয়েছে। Admin যাচাই করার পর Account Active হবে।";
+        message.textContent = "       Admin    Account Active ";
 
         document.getElementById("accountStatus").textContent = "Pending Verification";
         document.getElementById("profileStatus").textContent = "Pending Verification";
       } catch (e) {
         console.error(e);
         message.style.display = "block";
-        message.textContent = "❌ কিছু সমস্যা হয়েছে, আবার চেষ্টা করুন।";
+        message.textContent = "   ,   ";
       } finally {
         btnSubmit.disabled = false;
-        btnSubmit.textContent = "পেমেন্ট করেছি — যাচাইয়ের জন্য পাঠান";
+        btnSubmit.textContent = "     ";
       }
     };
 
@@ -560,8 +560,8 @@
       const tg = window.Telegram?.WebApp;
       if (navigator.clipboard) {
         navigator.clipboard.writeText(number);
-        if(tg && tg.showAlert) tg.showAlert("নম্বর কপি হয়েছে: " + number);
-        else alert("নম্বর কপি হয়েছে: " + number);
+        if(tg && tg.showAlert) tg.showAlert("  : " + number);
+        else alert("  : " + number);
       } else {
         if(tg && tg.showAlert) tg.showAlert(number);
         else alert(number);
