@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EarnEasy Pro</title>
+
+  <!-- Telegram WebApp SDK -->
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #fff5fa;
+      color: #222;
+      padding-bottom: 80px;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #ff2f92, #ff5cad);
+      color: white;
+      padding: 22px 18px;
+      border-radius: 0 0 25px 25px;
+    }
+
+    .header h2 {
+      font-size: 23px;
+      margin-bottom: 5px;
+    }
+
+    .header p {
+      opacity: .9;
+      font-size: 14px;
+    }
+
+    .container {
+      padding: 16px;
+    }
+
+    .balance {
+      background: white;
+      border-radius: 18px;
+      padding: 20px;
+      margin-top: -5px;
+      box-shadow: 0 5px 18px rgba(0,0,0,.07);
+    }
+
+    .balance small {
+      color: #777;
+    }
+
+    .balance h1 {
+      color: #ff2f92;
+      margin-top: 7px;
+      font-size: 32px;
+    }
+
+    .status {
+      margin-top: 12px;
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 20px;
+      background: #fff0f6;
+      color: #ff2f92;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .activation {
+      background: white;
+      margin-top: 15px;
+      padding: 18px;
+      border-radius: 18px;
+      box-shadow: 0 5px 18px rgba(0,0,0,.06);
+    }
+
+    .activation h3 {
+      color: #222;
+      margin-bottom: 8px;
+    }
+
+    .fee {
+      font-size: 28px;
+      color: #ff2f92;
+      font-weight: bold;
+      margin: 10px 0 15px;
+    }
+
+    .pay-box {
+      background: #fff5fa;
+      padding: 12px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+    }
+
+    .pay-box strong {
+      color: #ff2f92;
+    }
+
+    .copy {
+      float: right;
+      border: 0;
+      background: #ff2f92;
+      color: white;
+      padding: 5px 9px;
+      border-radius: 7px;
+      cursor: pointer;
+    }
+
+    input {
+      width: 100%;
+      padding: 13px;
+      border: 1px solid #ddd;
+      border-radius: 10px;
+      margin-top: 10px;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #ff2f92;
+    }
+
+    .submit {
+      width: 100%;
+      margin-top: 12px;
+      padding: 14px;
+      border: 0;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ff2f92, #ff5cad);
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .info {
+      margin-top: 12px;
+      font-size: 12px;
+      color: #777;
+      line-height: 1.5;
+    }
+
+    .nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: white;
+      display: flex;
+      justify-content: space-around;
+      padding: 10px 4px;
+      box-shadow: 0 -3px 15px rgba(0,0,0,.08);
+      z-index: 10;
+    }
+
+    .nav button {
+      background: none;
+      border: 0;
+      color: #777;
+      font-size: 11px;
+      cursor: pointer;
+      padding: 5px;
+    }
+
+    .nav button.active {
+      color: #ff2f92;
+      font-weight: bold;
+    }
+
+    .page {
+      display: none;
+    }
+
+    .page.active {
+      display: block;
+    }
+
+    .card {
+      background: white;
+      padding: 18px;
+      border-radius: 18px;
+      margin-bottom: 12px;
+      box-shadow: 0 5px 18px rgba(0,0,0,.05);
+    }
+
+    .card h3 {
+      margin-bottom: 8px;
+    }
+
+    .locked {
+      text-align: center;
+      padding: 30px 15px;
+      color: #888;
+    }
+
+    .message {
+      margin-top: 10px;
+      padding: 10px;
+      border-radius: 9px;
+      background: #fff4d9;
+      color: #946200;
+      display: none;
+      font-size: 13px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="header">
+    <h2>EarnEasy Pro</h2>
+    <p id="welcome">স্বাগতম 👋</p>
+  </div>
+
+  <main class="container">
+
+    <!-- HOME -->
+    <section id="home" class="page active">
+
+      <div class="balance">
+        <small>Available Balance</small>
+        <h1 id="userBalance">৳0.00</h1>
+        <span class="status" id="accountStatus">
+          Loading...
+        </span>
+      </div>
+
+      <div class="activation" id="activationSection">
+
+        <h3>🔐 Account Activation</h3>
+
+        <p>
+          আপনার অ্যাকাউন্ট চালু করতে একবার
+          <b>৳15</b> Activation Fee পাঠান।
+        </p>
+
+        <div class="fee">৳15</div>
+
+        <div class="pay-box">
+          <strong>bKash</strong><br>
+          01986755106
+          <button class="copy" onclick="copyNumber('01986755106')">
+            Copy
+          </button>
+        </div>
+
+        <div class="pay-box">
+          <strong>Nagad</strong><br>
+          01302546027
+          <button class="copy" onclick="copyNumber('01302546027')">
+            Copy
+          </button>
+        </div>
+
+        <p style="font-size:13px;margin-top:12px;">
+          টাকা পাঠানোর পর নিচে Transaction ID দিন:
+        </p>
+
+        <input
+          id="trx"
+          type="text"
+          placeholder="Transaction ID লিখুন"
+        >
+
+        <button class="submit" id="btnSubmit" onclick="submitActivation()">
+          পেমেন্ট করেছি — যাচাইয়ের জন্য পাঠান
+        </button>
+
+        <div class="message" id="message"></div>
+
+        <div class="info">
+          ⚠️ Transaction ID দেওয়ার পর আপনার পেমেন্ট
+          ম্যানুয়ালি যাচাই করা হবে। যাচাই সম্পন্ন হলে
+          অ্যাকাউন্ট Active হবে।
+        </div>
+
+      </div>
+    </section>
+
+
+    <!-- TASKS -->
+    <section id="tasks" class="page">
+      <div class="card locked" id="taskBox">
+        <h3>🔒 Tasks Locked</h3>
+        <p>Account Active করার পর Tasks ব্যবহার করতে পারবেন।</p>
+      </div>
+    </section>
+
+
+    <!-- REFERRAL -->
+    <section id="referral" class="page">
+      <div class="card locked" id="refBox">
+        <h3>🔒 Referral Locked</h3>
+        <p>Account Active করার পর Referral ব্যবহার করতে পারবেন।</p>
+      </div>
+    </section>
+
+
+    <!-- WALLET -->
+    <section id="wallet" class="page">
+
+      <div class="card">
+        <h3>Wallet</h3>
+        <p>Available Balance: <b id="walletBalance">৳0.00</b></p>
+        <p>Task Income: <b>৳0.00</b></p>
+        <p>Referral Income: <b>৳0.00</b></p>
+        <p>Other Income: <b>৳0.00</b></p>
+      </div>
+
+      <div class="card locked">
+        <h3>🔒 Withdrawal Locked</h3>
+        <p>Minimum Withdrawal: ৳10</p>
+        <p>Account Active হওয়ার পর Withdrawal চালু হবে।</p>
+      </div>
+
+    </section>
+
+
+    <!-- PROFILE -->
+    <section id="profile" class="page">
+
+      <div class="card">
+        <h3>Profile</h3>
+        <p id="profileName">Telegram User</p>
+        <p id="profileId">User ID: —</p>
+        <p>Account Status: <b id="profileStatus">Loading...</b></p>
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- NAVIGATION -->
+  <nav class="nav">
+
+    <button class="active" onclick="showPage('home', this)">
+      🏠<br>Home
+    </button>
+
+    <button onclick="showPage('tasks', this)">
+      ✓<br>Tasks
+    </button>
+
+    <button onclick="showPage('referral', this)">
+      👥<br>Referral
+    </button>
+
+    <button onclick="showPage('wallet', this)">
+      ৳<br>Wallet
+    </button>
+
+    <button onclick="showPage('profile', this)">
+      👤<br>Profile
+    </button>
+
+  </nav>
+
+  <!-- FIREBASE MODULES -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, getDoc, setDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Firebase Configuration
+    const firebaseConfig = {
+      apiKey: "AIzaSyANCpKWsYBRowzI0BOP9xKVXxwXy1nWrxI",
+      authDomain: "earneasy-pro.firebaseapp.com",
+      projectId: "earneasy-pro",
+      storageBucket: "earneasy-pro.firebasestorage.app",
+      messagingSenderId: "383921461763",
+      appId: "1:383921461763:web:da868208e8bf7cae3f8c36",
+      measurementId: "G-9K9GXX2TV4"
+    };
+
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    const tg = window.Telegram.WebApp;
+    tg.ready();
+    tg.expand();
+
+    let currentUserId = null;
+
+    // Load & Manage User Data
+    async function initUser() {
+      if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
+        const user = tg.initDataUnsafe.user;
+        currentUserId = user.id.toString();
+
+        const name = (user.first_name || "") + (user.last_name ? " " + user.last_name : "");
+
+        document.getElementById("welcome").textContent = "স্বাগতম, " + (name || "User") + " 👋";
+        document.getElementById("profileName").textContent = name || "Telegram User";
+        document.getElementById("profileId").textContent = "User ID: " + currentUserId;
+
+        // Firebase Firestore Check
+        const userRef = doc(db, "users", currentUserId);
+        const userSnap = await getDoc(userRef);
+
+        if (userSnap.exists()) {
+          // User already exists, render data
+          const data = userSnap.data();
+          updateUI(data);
+        } else {
+          // New User Creation
+          const newUser = {
+            userId: currentUserId,
+            name: name || "User",
+            balance: 0,
+            status: "Not Activated",
+            trxId: "",
+            createdAt: new Date().toISOString()
+          };
+          await setDoc(userRef, newUser);
+          updateUI(newUser);
+        }
+      } else {
+        // Default View if opened outside Telegram
+        document.getElementById("accountStatus").textContent = "Demo Mode";
+        document.getElementById("profileStatus").textContent = "Demo Mode";
+      }
+    }
+
+    // UI Update Helper
+    function updateUI(data) {
+      document.getElementById("userBalance").textContent = "৳" + (data.balance || 0).toFixed(2);
+      document.getElementById("walletBalance").textContent = "৳" + (data.balance || 0).toFixed(2);
+      
+      const statusText = data.status || "Not Activated";
+      document.getElementById("accountStatus").textContent = statusText;
+      document.getElementById("profileStatus").textContent = statusText;
+
+      if (statusText === "Active") {
+        document.getElementById("activationSection").style.display = "none";
+        document.getElementById("taskBox").innerHTML = "<h3>✅ Tasks Unlocked</h3><p>আপনি কাজ শুরু করতে পারেন।</p>";
+        document.getElementById("refBox").innerHTML = "<h3>👥 Referral Active</h3><p>বন্ধুদের ইনভাইট করুন।</p>";
+      } else if (statusText === "Pending Verification") {
+        document.getElementById("message").style.display = "block";
+        document.getElementById("message").textContent = "⏳ আপনার পেমেন্ট অ্যাডমিন যাচাই করছেন। অনুগ্রহ করে অপেক্ষা করুন।";
+      }
+    }
+
+    // Handle Activation Submission
+    window.submitActivation = async function() {
+      const trxInput = document.getElementById("trx").value.trim();
+      const message = document.getElementById("message");
+      const btnSubmit = document.getElementById("btnSubmit");
+
+      if (!trxInput) {
+        message.style.display = "block";
+        message.textContent = "⚠️ আগে Transaction ID লিখুন।";
+        return;
+      }
+
+      if (trxInput.length < 5) {
+        message.style.display = "block";
+        message.textContent = "⚠️ সঠিক Transaction ID দিন।";
+        return;
+      }
+
+      if (!currentUserId) {
+        tg.showAlert("Telegram App এর ভেতর থেকে ওপেন করুন।");
+        return;
+      }
+
+      try {
+        btnSubmit.disabled = true;
+        btnSubmit.textContent = "পাঠানো হচ্ছে...";
+
+        const userRef = doc(db, "users", currentUserId);
+        await updateDoc(userRef, {
+          trxId: trxInput,
+          status: "Pending Verification",
+          submittedAt: new Date().toISOString()
+        });
+
+        message.style.display = "block";
+        message.textContent = "✅ আপনার পেমেন্ট যাচাইয়ের জন্য পাঠানো হয়েছে। Admin যাচাই করার পর Account Active হবে।";
+
+        document.getElementById("accountStatus").textContent = "Pending Verification";
+        document.getElementById("profileStatus").textContent = "Pending Verification";
+      } catch (e) {
+        console.error(e);
+        message.style.display = "block";
+        message.textContent = "❌ কিছু সমস্যা হয়েছে, আবার চেষ্টা করুন।";
+      } finally {
+        btnSubmit.disabled = false;
+        btnSubmit.textContent = "পেমেন্ট করেছি — যাচাইয়ের জন্য পাঠান";
+      }
+    };
+
+    // Initialize App
+    initUser();
+  </script>
+
+  <script>
+    // Page navigation logic
+    function showPage(page, button) {
+      document.querySelectorAll(".page").forEach(function(el) {
+        el.classList.remove("active");
+      });
+
+      document.getElementById(page).classList.add("active");
+
+      document.querySelectorAll(".nav button").forEach(function(el) {
+        el.classList.remove("active");
+      });
+
+      button.classList.add("active");
+    }
+
+    // Copy payment number logic
+    function copyNumber(number) {
+      const tg = window.Telegram?.WebApp;
+      if (navigator.clipboard) {
+        navigator.clipboard.writeText(number);
+        if(tg && tg.showAlert) tg.showAlert("নম্বর কপি হয়েছে: " + number);
+        else alert("নম্বর কপি হয়েছে: " + number);
+      } else {
+        if(tg && tg.showAlert) tg.showAlert(number);
+        else alert(number);
+      }
+    }
+  </script>
+
+</body>
+</html>
