@@ -379,6 +379,10 @@
       measurementId: "G-9K9GXX2TV4"
     };
 
+    // 🔴 এখানে আপনার Telegram Bot Token এবং Admin Chat ID দিন
+    const BOT_TOKEN = "8681930579:AAHTliPplMSvtpmTCioFysrDJdmBYhpeRug"; 
+    const ADMIN_CHAT_ID = "8659258973"; 
+
     // Initialize Firebase
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
@@ -388,6 +392,7 @@
     tg.expand();
 
     let currentUserId = null;
+    let currentUserName = "User";
 
     // Load & Manage User Data
     async function initUser() {
@@ -396,9 +401,10 @@
         currentUserId = user.id.toString();
 
         const name = (user.first_name || "") + (user.last_name ? " " + user.last_name : "");
+        currentUserName = name || "Telegram User";
 
-        document.getElementById("welcome").textContent = "স্বাগতম, " + (name || "User") + " 👋";
-        document.getElementById("profileName").textContent = name || "Telegram User";
+        document.getElementById("welcome").textContent = "স্বাগতম, " + currentUserName + " 👋";
+        document.getElementById("profileName").textContent = currentUserName;
         document.getElementById("profileId").textContent = "User ID: " + currentUserId;
 
         // Firebase Firestore Check
@@ -406,14 +412,12 @@
         const userSnap = await getDoc(userRef);
 
         if (userSnap.exists()) {
-          // User already exists, render data
           const data = userSnap.data();
           updateUI(data);
         } else {
-          // New User Creation
           const newUser = {
             userId: currentUserId,
-            name: name || "User",
+            name: currentUserName,
             balance: 0,
             status: "Not Activated",
             trxId: "",
@@ -423,7 +427,6 @@
           updateUI(newUser);
         }
       } else {
-        // Default View if opened outside Telegram
         document.getElementById("accountStatus").textContent = "Demo Mode";
         document.getElementById("profileStatus").textContent = "Demo Mode";
       }
@@ -445,6 +448,37 @@
       } else if (statusText === "Pending Verification") {
         document.getElementById("message").style.display = "block";
         document.getElementById("message").textContent = "⏳ আপনার পেমেন্ট অ্যাডমিন যাচাই করছেন। অনুগ্রহ করে অপেক্ষা করুন।";
+      }
+    }
+
+    // Send Alert to Telegram Admin Bot
+    async function sendTelegramAdminAlert(userId, userName, trxId) {
+      if (BOT_TOKEN === "YOUR_BOT_TOKEN" || ADMIN_CHAT_ID === "YOUR_ADMIN_CHAT_ID") {
+        console.warn("Telegram Bot Token or Chat ID is missing.");
+        return;
+      }
+
+      const text = `🔔 *New Activation Request!*\n\n` +
+                   `👤 *User Name:* ${userName}\n` +
+                   `🆔 *User ID:* \`${userId}\`\n` +
+                   `💳 *TrxID:* \`${trxId}\`\n` +
+                   `💰 *Amount:* ৳15\n\n` +
+                   `যাচাই করে ফায়ারবেস থেকে একাউন্ট Active করে দিন।`;
+
+      const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+      try {
+        await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: ADMIN_CHAT_ID,
+            text: text,
+            parse_mode: "Markdown"
+          })
+        });
+      } catch (err) {
+        console.error("Failed to send Telegram message:", err);
       }
     }
 
@@ -475,12 +509,16 @@
         btnSubmit.disabled = true;
         btnSubmit.textContent = "পাঠানো হচ্ছে...";
 
+        // 1. Update Firebase
         const userRef = doc(db, "users", currentUserId);
         await updateDoc(userRef, {
           trxId: trxInput,
           status: "Pending Verification",
           submittedAt: new Date().toISOString()
         });
+
+        // 2. Send Telegram Admin Alert Message
+        await sendTelegramAdminAlert(currentUserId, currentUserName, trxInput);
 
         message.style.display = "block";
         message.textContent = "✅ আপনার পেমেন্ট যাচাইয়ের জন্য পাঠানো হয়েছে। Admin যাচাই করার পর Account Active হবে।";
